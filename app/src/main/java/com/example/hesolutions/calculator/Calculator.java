@@ -48,7 +48,10 @@ public class Calculator extends AppCompatActivity {
         CE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (wrong==false)internal = 0;
+                if (wrong==false){
+                    internal = 0;
+                    equation.setText("");
+                }
                 result.setText("0");
                 wrong = true;
             }
@@ -66,13 +69,15 @@ public class Calculator extends AppCompatActivity {
         D.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!result.getText().toString().equals("0")) {
-                    String number = result.getText().toString();
-                    if (number.length()==1){
-                        result.setText("0");
-                    } else {
-                        String newnumber = number.substring(0, number.length()-1);
-                        result.setText(newnumber);
+                if (wrong == true) {
+                    if (!result.getText().toString().equals("0")) {
+                        String number = result.getText().toString();
+                        if (number.length() == 1) {
+                            result.setText("0");
+                        } else {
+                            String newnumber = number.substring(0, number.length() - 1);
+                            result.setText(newnumber);
+                        }
                     }
                 }
             }
@@ -81,10 +86,12 @@ public class Calculator extends AppCompatActivity {
         decimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String resultnumber = result.getText().toString();
-                if (!resultnumber.contains(".")){
-                    resultnumber = resultnumber + ".";
-                    result.setText(resultnumber);
+                if (wrong == true) {
+                    String resultnumber = result.getText().toString();
+                    if (!resultnumber.contains(".")) {
+                        resultnumber = resultnumber + ".";
+                        result.setText(resultnumber);
+                    }
                 }
             }
         });
@@ -92,16 +99,18 @@ public class Calculator extends AppCompatActivity {
         negative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String resultnumber = result.getText().toString();
-                double value = Double.parseDouble(resultnumber);
-                if (!resultnumber.contains("-") && value != 0){
-                    value = -value;
-                    long ipart = (long) value;
-                    double fpart = value - ipart;
-                    if (fpart == 0.0) {
-                        result.setText(Long.toString(ipart));
-                    } else {
-                        result.setText(Double.toString(value));
+                if (wrong == true) {
+                    String resultnumber = result.getText().toString();
+                    double value = Double.parseDouble(resultnumber);
+                    if (!resultnumber.contains("-") && value != 0) {
+                        value = -value;
+                        long ipart = (long) value;
+                        double fpart = value - ipart;
+                        if (fpart == 0.0) {
+                            result.setText(Long.toString(ipart));
+                        } else {
+                            result.setText(Double.toString(value));
+                        }
                     }
                 }
             }
@@ -421,41 +430,43 @@ public class Calculator extends AppCompatActivity {
         devide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                equclean = true;
-                if (numclean == true) {
-                    numclean = false;
-                    if (result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
-                        equation.setText("0/");
-                        result.setText(R.string.error_message);
-                        wrong = false;
-                    }else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
-                        equation.setText(result.getText().toString() + "/");
-                        internal = Double.parseDouble(result.getText().toString());
+                if (wrong == true) {
+                    equclean = true;
+                    if (numclean == true) {
+                        numclean = false;
+                        if (result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
+                            equation.setText("0/");
+                            result.setText(R.string.error_message);
+                            wrong = false;
+                        } else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
+                            equation.setText(result.getText().toString() + "/");
+                            internal = Double.parseDouble(result.getText().toString());
+                        } else {
+                            String equationnumber = equation.getText().toString();
+                            String resultnumber = result.getText().toString();
+                            State value = Calculation(equationnumber, resultnumber);
+                            boolean error = value.getError();
+                            if (error == true) {
+                                internal = value.getNumber();
+                                long ipart = (long) internal;
+                                double fpart = internal - ipart;
+                                if (fpart == 0.0) {
+                                    result.setText(Long.toString(ipart));
+                                } else {
+                                    result.setText(Double.toString(internal));
+                                }
+                            } else {
+                                result.setText(R.string.error_message);
+                            }
+                            equationnumber = equationnumber + resultnumber + "/";
+                            equation.setText(equationnumber);
+                        }
                     } else {
                         String equationnumber = equation.getText().toString();
-                        String resultnumber = result.getText().toString();
-                        State value =  Calculation(equationnumber, resultnumber);
-                        boolean error = value.getError();
-                        if (error == true) {
-                            internal = value.getNumber();
-                            long ipart = (long) internal;
-                            double fpart = internal - ipart;
-                            if (fpart == 0.0) {
-                                result.setText(Long.toString(ipart));
-                            } else {
-                                result.setText(Double.toString(internal));
-                            }
-                        }else {
-                            result.setText(R.string.error_message);
-                        }
-                        equationnumber = equationnumber + resultnumber + "/";
-                        equation.setText(equationnumber);
+                        StringBuilder newequation = new StringBuilder(equationnumber);
+                        newequation.setCharAt(equationnumber.length() - 1, '/');
+                        equation.setText(newequation);
                     }
-                }else{
-                    String equationnumber = equation.getText().toString();
-                    StringBuilder newequation = new StringBuilder(equationnumber);
-                    newequation.setCharAt(equationnumber.length()-1, '/');
-                    equation.setText(newequation);
                 }
             }
         });
@@ -463,41 +474,42 @@ public class Calculator extends AppCompatActivity {
         equal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                equclean = true;
-                if (equation.getText().toString().equals(""))
-                {}else if (!equation.getText().toString().equals("")) {
-sdfl                    double resultnumber = Double.parseDouble(result.getText().toString());
-                    String equationnumber = equation.getText().toString();
-                    String lastdigit = equationnumber.substring(equationnumber.length() - 1, equationnumber.length());
-                    if (lastdigit.equals("/") && resultnumber == 0)
-                    {
-                        result.setText(R.string.error_message);
-                        wrong = false;
-                    }else {
-                        switch (lastdigit) {
-                            case "+":
-                                internal += resultnumber;
-                                break;
-                            case "-":
-                                internal -= resultnumber;
-                                break;
-                            case "*":
-                                internal *= resultnumber;
-                                break;
-                            case "/":
-                                internal /= resultnumber;
-                                break;
-                        }
-                        long ipart = (long) internal;
-                        double fpart = internal - ipart;
-                        if (fpart == 0.0) {
-                            result.setText(Long.toString(ipart));
+                if (wrong == true) {
+                    equclean = true;
+                    if (equation.getText().toString().equals("")) {
+                    } else if (!equation.getText().toString().equals("")) {
+                        double resultnumber = Double.parseDouble(result.getText().toString());
+                        String equationnumber = equation.getText().toString();
+                        String lastdigit = equationnumber.substring(equationnumber.length() - 1, equationnumber.length());
+                        if (lastdigit.equals("/") && resultnumber == 0) {
+                            result.setText(R.string.error_message);
+                            wrong = false;
                         } else {
-                            result.setText(Double.toString(internal));
+                            switch (lastdigit) {
+                                case "+":
+                                    internal += resultnumber;
+                                    break;
+                                case "-":
+                                    internal -= resultnumber;
+                                    break;
+                                case "*":
+                                    internal *= resultnumber;
+                                    break;
+                                case "/":
+                                    internal /= resultnumber;
+                                    break;
+                            }
+                            long ipart = (long) internal;
+                            double fpart = internal - ipart;
+                            if (fpart == 0.0) {
+                                result.setText(Long.toString(ipart));
+                            } else {
+                                result.setText(Double.toString(internal));
+                            }
                         }
-                    }
 
-                    equation.setText("");
+                        equation.setText("");
+                    }
                 }
             }
         });
