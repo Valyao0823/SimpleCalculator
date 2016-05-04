@@ -298,19 +298,10 @@ public class Calculator extends AppCompatActivity {
                         if (result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                             equation.setText("0+");
                             result.setText("0");
-                        } else if (result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
-                            equation.setText(equation.getText().toString() + "0+");
-                            long ipart = (long) internal;
-                            double fpart = internal - ipart;
-                            if (fpart == 0.0) {
-                                result.setText(Long.toString(ipart));
-                            } else {
-                                result.setText(Double.toString(internal));
-                            }
                         } else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                             equation.setText(result.getText().toString() + "+");
                             internal = Double.parseDouble(result.getText().toString());
-                        } else if (!result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
+                        } else {
                             String equationnumber = equation.getText().toString();
                             String resultnumber = result.getText().toString();
                             State value =  Calculation(equationnumber, resultnumber);
@@ -350,19 +341,10 @@ public class Calculator extends AppCompatActivity {
                         if (result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                             equation.setText("0-");
                             result.setText("0");
-                        } else if (result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
-                            equation.setText(equation.getText().toString() + "0-");
-                            long ipart = (long) internal;
-                            double fpart = internal - ipart;
-                            if (fpart == 0.0) {
-                                result.setText(Long.toString(ipart));
-                            } else {
-                                result.setText(Double.toString(internal));
-                            }
-                        } else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
+                        }else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                             equation.setText(result.getText().toString() + "-");
                             internal = Double.parseDouble(result.getText().toString());
-                        } else if (!result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
+                        } else {
                             String equationnumber = equation.getText().toString();
                             String resultnumber = result.getText().toString();
                             State value =  Calculation(equationnumber, resultnumber);
@@ -402,20 +384,10 @@ public class Calculator extends AppCompatActivity {
                         if (result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                             equation.setText("0*");
                             result.setText("0");
-                        } else if (result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
-                            equation.setText(equation.getText().toString() + "0*");
-                            internal = 0;
-                            long ipart = (long) internal;
-                            double fpart = internal - ipart;
-                            if (fpart == 0.0) {
-                                result.setText(Long.toString(ipart));
-                            } else {
-                                result.setText(Double.toString(internal));
-                            }
                         } else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                             equation.setText(result.getText().toString() + "*");
                             internal = Double.parseDouble(result.getText().toString());
-                        } else if (!result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
+                        } else{
                             String equationnumber = equation.getText().toString();
                             String resultnumber = result.getText().toString();
                             State value =  Calculation(equationnumber, resultnumber);
@@ -456,17 +428,13 @@ public class Calculator extends AppCompatActivity {
                         equation.setText("0/");
                         result.setText(R.string.error_message);
                         wrong = false;
-                    } else if (result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
-                        equation.setText(equation.getText().toString() + "0/");
-                        result.setText(R.string.error_message);
-                        wrong = false;
-                    } else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
+                    }else if (!result.getText().toString().equals("0") && equation.getText().toString().equals("")) {
                         equation.setText(result.getText().toString() + "/");
                         internal = Double.parseDouble(result.getText().toString());
-                    } else if (!result.getText().toString().equals("0") && !equation.getText().toString().equals("")) {
+                    } else {
                         String equationnumber = equation.getText().toString();
                         String resultnumber = result.getText().toString();
-                        State value =  Calculation(equationnumber,resultnumber);
+                        State value =  Calculation(equationnumber, resultnumber);
                         boolean error = value.getError();
                         if (error == true) {
                             internal = value.getNumber();
@@ -542,22 +510,18 @@ public class Calculator extends AppCompatActivity {
         State state = new State(resultnumber, true);
         switch (lastdigit) {
             case "+":
-                System.out.println("******internal is " + internal + " + result " + resultnumber);
                 internal += resultnumber;
                 state = new State(internal, true);
                 break;
             case "-":
-                System.out.println("******internal is " + internal + " - result " + resultnumber);
                 internal -= resultnumber;
                 state = new State(internal, true);
                 break;
             case "*":
-                System.out.println("******internal is " + internal + " * result " + resultnumber);
                 internal *= resultnumber;
                 state = new State(internal, true);
                 break;
             case "/":
-                System.out.println("******internal is " + internal + " / result " + resultnumber);
                 if (resultnumber == 0){
                     wrong = false;
                     state = new State(internal, false);
