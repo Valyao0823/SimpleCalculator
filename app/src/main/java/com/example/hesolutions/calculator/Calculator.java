@@ -466,7 +466,7 @@ public class Calculator extends AppCompatActivity {
                 equclean = true;
                 if (equation.getText().toString().equals(""))
                 {}else if (!equation.getText().toString().equals("")) {
-                    double resultnumber = Double.parseDouble(result.getText().toString());
+sdfl                    double resultnumber = Double.parseDouble(result.getText().toString());
                     String equationnumber = equation.getText().toString();
                     String lastdigit = equationnumber.substring(equationnumber.length() - 1, equationnumber.length());
                     if (lastdigit.equals("/") && resultnumber == 0)
